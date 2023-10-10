@@ -80,4 +80,27 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+// DELETE route to delete a Product by ID
+router.delete('/:productId', async (req, res) => {
+  try {
+    const { productId } = req.params;
+
+    // Check if the Product exists
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // Perform the delete operation
+    await product.deleteOne({_id: productId})
+
+    res.status(204).json({ message: 'Product deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+
 module.exports = router;
