@@ -5,10 +5,20 @@ const imageSchema = new mongoose.Schema({
   filename: String,
   path: String,
   image: { data: Buffer, contentType: String },
-  contractId: {
+  productId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Contract'
+    ref: 'Product'
   },
+  sendBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  sendTo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Company'
+  },
+},{
+  timestamps: true,
 });
 
 module.exports = mongoose.model('Image', imageSchema);

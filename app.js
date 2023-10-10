@@ -7,9 +7,12 @@ const port = process.env.PORT || 3001;
 
 require('dotenv').config();
 
+const corsOptions = {
+  origin: '*',
+};
 // Middleware for parsing JSON requests
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Connect to MongoDB using Mongoose
 mongoose.connect(process.env.MONGO_URI, {
@@ -21,6 +24,8 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // Routes
 app.use('/api/users', require('./routes/user'));
+app.use('/api/company', require('./routes/company'));
+app.use('/api/product', require('./routes/product'));
 app.use('/api/contracts', require('./routes/contract'));
 app.use('/api/images', require('./routes/image'));
 
