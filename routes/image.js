@@ -14,7 +14,7 @@ router.post("/upload-image", upload.single("image"), async (req, res) => {
     // Extract image data and content type from the uploaded file
     const imageData = req.file.buffer;
     const contentType = req.file.mimetype;
-    const { sendBy, sendTo } = req.body;
+    const { sendBy, sendTo, productId } = req.body;
     // Create a new image record and save it to the database
     const image = new Image({
       filename: req.file.originalname,
@@ -22,6 +22,7 @@ router.post("/upload-image", upload.single("image"), async (req, res) => {
       image: { data: imageData, contentType },
       sendBy,
       sendTo,
+      productId,
     });
 
     await image.save();
@@ -34,7 +35,7 @@ router.post("/upload-image", upload.single("image"), async (req, res) => {
 });
 
 // GET endpoint to retrieve and serve an image
-router.get('/image', async (req, res) => {
+router.get("/image", async (req, res) => {
   try {
     const { sendTo } = req.query;
 
@@ -42,20 +43,21 @@ router.get('/image', async (req, res) => {
     const images = await Image.find({ sendTo });
 
     if (!images || images.length === 0) {
-      return res.status(404).json({ message: 'No images found for sendTo: ' + sendTo });
+      return res
+        .status(404)
+        .json({ message: "No images found for sendTo: " + sendTo });
     }
 
     // Return the array of image objects
     res.json(images);
   } catch (error) {
-    console.error('Error fetching images:', error);
-    res.status(500).json({ message: 'Error fetching images' });
+    console.error("Error fetching images:", error);
+    res.status(500).json({ message: "Error fetching images" });
   }
 });
 
-
 // Route to Fetch Individual Images by '_id'
-router.get('/image-id/:_id', async (req, res) => {
+router.get("/image-id/:_id", async (req, res) => {
   try {
     const { _id } = req.params;
     console.log(_id);
@@ -63,15 +65,17 @@ router.get('/image-id/:_id', async (req, res) => {
     const image = await Image.findById(_id);
 
     if (!image) {
-      return res.status(404).json({ message: 'Image not found with _id: ' + _id });
+      return res
+        .status(404)
+        .json({ message: "Image not found with _id: " + _id });
     }
 
     // Send the image data and content type as a response
-    res.set('Content-Type', image.image.contentType);
+    res.set("Content-Type", image.image.contentType);
     res.send(image.image.data);
   } catch (error) {
-    console.error('Error fetching image by _id:', error);
-    res.status(500).json({ message: 'Error fetching image by _id' });
+    console.error("Error fetching image by _id:", error);
+    res.status(500).json({ message: "Error fetching image by _id" });
   }
 });
 
