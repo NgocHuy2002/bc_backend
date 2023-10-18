@@ -34,13 +34,35 @@ router.post("/upload-image", upload.single("image"), async (req, res) => {
   }
 });
 
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Find the product by ID
+    const image = await Image.findById(id);
+
+    if (!image) {
+      return res.status(404).json({ error: "Image not found" });
+    }
+
+    // Update the product fields with the new data from req.body
+    console.log(req.body.name);
+    image.isCheck = req.body.isCheck;
+    await image.save();
+
+    res.status(200).json(image);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 // GET endpoint to retrieve and serve an image
 router.get("/image", async (req, res) => {
   try {
-    const { sendTo } = req.query;
+    const { sendTo, isCheck } = req.query;
 
-    // Find all images with the provided 'sendTo' value
     const images = await Image.find({ sendTo });
+    // const images = await Image.find({ $and: [{ sendTo }, { isCheck }] });
 
     if (!images || images.length === 0) {
       return res
@@ -48,7 +70,6 @@ router.get("/image", async (req, res) => {
         .json({ message: "No images found for sendTo: " + sendTo });
     }
 
-    // Return the array of image objects
     res.json(images);
   } catch (error) {
     console.error("Error fetching images:", error);

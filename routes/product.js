@@ -65,6 +65,7 @@ router.put("/:id", async (req, res) => {
 
     if (req.body.isSend) {
       product.isSend = req.body.isSend;
+      product.sendTo = req.body.sendTo;
     } else {
       product.name = req.body.name;
       product.number = req.body.number;

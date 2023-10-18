@@ -11,7 +11,11 @@ const productSchema = new mongoose.Schema({
   date: Date,
   hsd: String,
   ingredient: String,
-  isSend: { type: String, enum: ['WAIT','PENDING', 'REJECT', 'APPROVED', 'REFUSE'], default: 'WAIT' }
+  isSend: { type: String, enum: ['WAIT','PENDING', 'REJECT', 'APPROVED', 'REFUSE'], default: 'WAIT' },
+  sendTo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Company'
+  },
 },{
   timestamps: true,
 });
