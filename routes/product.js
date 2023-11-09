@@ -62,11 +62,15 @@ router.put("/:id", async (req, res) => {
     }
 
     // Update the product fields with the new data from req.body
+    if(req.body.isPublic){
+      product.isPublic = true;
+    }
 
     if (req.body.isSend) {
       product.isSend = req.body.isSend;
       product.sendTo = req.body.sendTo;
-    } else {
+    } 
+    if(!req.body.isPublic && !req.body.isSend) {
       product.name = req.body.name;
       product.number = req.body.number;
       product.hsd = req.body.hsd;

@@ -28,6 +28,7 @@ app.use('/api/company', require('./routes/company'));
 app.use('/api/product', require('./routes/product'));
 app.use('/api/contracts', require('./routes/contract'));
 app.use('/api/images', require('./routes/image'));
+app.use('/api/public', require('./routes/public_contract'));
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

@@ -58,7 +58,13 @@ router.post(
     { name: "data", maxCount: 1 },
   ]),
   async (req, res) => {
-    const publicKey = req.files["publicKey"][0].buffer.toString("utf-8");
+    let publicKey;
+    if(req.files["publicKey"]){
+      publicKey = req.files["publicKey"][0].buffer.toString("utf-8");
+    }
+    else{
+      res.status(401).json({message: "Chưa chọn file khóa công khai !!"});
+    }
     const data = req.body.data; // Access the JSON string from req.body
     console.log(data);
     // const data = JSON.parse(dataJSON);
